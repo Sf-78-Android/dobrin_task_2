@@ -68,6 +68,9 @@ class MainActivity : AppCompatActivity() {
             operations.removeFirst()
             isNegative = true
         }
+        if(operations[operations.size-1].matches(regex)){
+            operations.removeLast()
+        }
         val numbers = LinkedList<Double>()
         val operators = LinkedList<String>()
 
