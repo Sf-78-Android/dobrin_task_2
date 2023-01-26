@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     private var tvInput: TextView? = null
-    var lastNumeric: Boolean = false
+    private var lastNumeric: Boolean = false
     private var dotInserted: Boolean = false
-    var isNegative: Boolean = false
-    var hasResult = false
+    private var isNegative: Boolean = false
+    private var hasResult = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         dotInserted = false
         lastNumeric = false
         hasResult = false
+        isNegative = false
     }
 
     fun onDecimalPoint(view: View) {
@@ -75,19 +76,19 @@ class MainActivity : AppCompatActivity() {
                 operations = calculate(operations, "/")
             } else if (operations.contains("*")) {
                 operations = calculate(operations, "*")
-
             } else if (operations.contains("-")) {
                 operations = calculate(operations, "-")
             } else if (operations.contains("+")) {
                 operations = calculate(operations, "+")
             }
+        }
 
             result = operations[0].toDouble()
+
 
             if (result > 0) {
                 isNegative = false
             }
-        }
 
 
         tvInput?.text = removeZeroAfterDot(result.toString())
@@ -98,12 +99,12 @@ class MainActivity : AppCompatActivity() {
     private fun calculate(operations: MutableList<String>, operand: String): MutableList<String> {
         while (operations.contains(operand)) {
             val operandIndex = operations.indexOfFirst { it == operand }
-            val leftNum = operations[operandIndex - 1].toDouble()
+            val leftNum = getLeftNum(operations[operandIndex - 1])
             val rightNum = operations[operandIndex + 1].toDouble()
             when (operand) {
                 "/" -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
                     operations.remove(operations[operandIndex])
-                        .also { operations.remove(operations[operandIndex]) }
+                        .also { operations.remove(operations[operandIndex - 1]) }
                 }
                 "*" -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
                     operations.remove(operations[operandIndex])
@@ -120,6 +121,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return operations
+    }
+
+    private fun getLeftNum(number: String): Double {
+        if (isNegative) {
+            return 0.0 - number.toDouble()
+        }
+        return number.toDouble()
     }
 
 
