@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var tvInput: TextView? = null
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onDigit(view: View) {
-        if (hasResult){
+        if (hasResult) {
             onClear(view)
         }
         tvInput?.append((view as Button).text)
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         tvInput?.text = ""
         dotInserted = false
         lastNumeric = false
-        hasResult=false
+        hasResult = false
     }
 
     fun onDecimalPoint(view: View) {
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             tvInput?.append(".")
             dotInserted = true
             lastNumeric = false
-        } else if(hasResult){
+        } else if (hasResult) {
             onClear(view)
             tvInput?.append("0.")
             dotInserted = true
@@ -62,48 +61,65 @@ class MainActivity : AppCompatActivity() {
     fun onEqual(view: View) {
         var result = 0.0
         val regex = "(?<=[-+*/])|(?=[-+*/])".toRegex()
-        val operations = tvInput?.text.toString().split(regex).toMutableList()
+        var operations = tvInput?.text.toString().split(regex).toMutableList()
         operations.removeAll(listOf("", null))
         if (operations[0] == "-") {
             operations.removeFirst()
             isNegative = true
         }
-        if(operations[operations.size-1].matches(regex)){
+        if (operations[operations.size - 1].matches(regex)) {
             operations.removeLast()
         }
-        val numbers = LinkedList<Double>()
-        val operators = LinkedList<String>()
+        while (operations.size > 1) {
+            if (operations.contains("/")) {
+                operations = calculate(operations, "/")
+            } else if (operations.contains("*")) {
+                operations = calculate(operations, "*")
 
-        for (i in 0 until operations.size) {
-            try {
-                numbers.add(operations[i].toDouble())
-            } catch (e: java.lang.NumberFormatException) {
-                operators.add(operations[i])
+            } else if (operations.contains("-")) {
+                operations = calculate(operations, "-")
+            } else if (operations.contains("+")) {
+                operations = calculate(operations, "+")
+            }
+
+            result = operations[0].toDouble()
+
+            if (result > 0) {
+                isNegative = false
             }
         }
 
-        if (!numbers.isEmpty()) {
-            result = numbers.pop()
-            if (isNegative) {
-                result = 0 - result
-            }
-        }
-        while (!numbers.isEmpty()) {
-            if (!operators.isEmpty()) {
-                when (operators.pop()) {
-                    "-" -> result -= numbers.pop()
-                    "+" -> result += numbers.pop()
-                    "/" -> result /= numbers.pop()
-                    "*" -> result *= numbers.pop()
-                }
-            }
-        }
-        if (result > 0) {
-            isNegative = false
-        }
+
         tvInput?.text = removeZeroAfterDot(result.toString())
 
         hasResult = true
+    }
+
+    private fun calculate(operations: MutableList<String>, operand: String): MutableList<String> {
+        while (operations.contains(operand)) {
+            val operandIndex = operations.indexOfFirst { it == operand }
+            val leftNum = operations[operandIndex - 1].toDouble()
+            val rightNum = operations[operandIndex + 1].toDouble()
+            when (operand) {
+                "/" -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
+                    operations.remove(operations[operandIndex])
+                        .also { operations.remove(operations[operandIndex]) }
+                }
+                "*" -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
+                    operations.remove(operations[operandIndex])
+                        .also { operations.remove(operations[operandIndex]) }
+                }
+                "+" -> operations[operandIndex - 1] = (leftNum + rightNum).toString().also {
+                    operations.remove(operations[operandIndex])
+                        .also { operations.remove(operations[operandIndex]) }
+                }
+                else -> operations[operandIndex - 1] = (leftNum - rightNum).toString().also {
+                    operations.remove(operations[operandIndex])
+                        .also { operations.remove(operations[operandIndex]) }
+                }
+            }
+        }
+        return operations
     }
 
 
