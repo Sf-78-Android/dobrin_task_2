@@ -68,7 +68,8 @@ class MainActivity : AppCompatActivity() {
             operations.removeFirst()
             isNegative = true
         }
-        if (operations[operations.size - 1].matches(regex)) {
+        if (operations[operations.size - 1] == "-" || operations[operations.size - 1] == "+" ||
+            operations[operations.size - 1] == "*" || operations[operations.size - 1] == "/") {
             operations.removeLast()
         }
         while (operations.size > 1) {
