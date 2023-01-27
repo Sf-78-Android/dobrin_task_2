@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                         .also { operations.removeAt(operandIndex) }
                 }
                 else -> operations[operandIndex - 1] = (leftNum - rightNum).toString().also {
-                    operations.remove(operations[operandIndex])
+                    operations.removeAt(operandIndex)
                         .also { operations.removeAt(operandIndex) }
                 }
             }
