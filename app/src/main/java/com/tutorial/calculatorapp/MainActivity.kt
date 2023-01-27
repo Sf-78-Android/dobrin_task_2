@@ -104,20 +104,20 @@ class MainActivity : AppCompatActivity() {
             val rightNum = operations[operandIndex + 1].toDouble()
             when (operand) {
                 "/" -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
-                    operations.remove(operations[operandIndex])
-                        .also { operations.remove(operations[operandIndex - 1]) }
+                    operations.removeAt(operandIndex)
+                        .also { operations.removeAt(operandIndex - 1) }
                 }
                 "*" -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
-                    operations.remove(operations[operandIndex])
-                        .also { operations.remove(operations[operandIndex]) }
+                    operations.removeAt(operandIndex)
+                        .also { operations.removeAt(operandIndex) }
                 }
                 "+" -> operations[operandIndex - 1] = (leftNum + rightNum).toString().also {
-                    operations.remove(operations[operandIndex])
-                        .also { operations.remove(operations[operandIndex]) }
+                    operations.removeAt(operandIndex)
+                        .also { operations.removeAt(operandIndex) }
                 }
                 else -> operations[operandIndex - 1] = (leftNum - rightNum).toString().also {
                     operations.remove(operations[operandIndex])
-                        .also { operations.remove(operations[operandIndex]) }
+                        .also { operations.removeAt(operandIndex) }
                 }
             }
         }
