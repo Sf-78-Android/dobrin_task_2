@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.tutorial.calculatorapp.constants.Constants
+import com.tutorial.calculatorapp.model.Calculator
 
 class MainActivity : AppCompatActivity() {
     private var tvInput: TextView? = null
@@ -12,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private var dotInserted: Boolean = false
     private var isNegative: Boolean = false
     private var hasResult = false
+    private val myCalculator = Calculator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +40,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onDecimalPoint(view: View) {
         if (lastNumeric && !dotInserted && !hasResult) {
-            tvInput?.append(".")
+            tvInput?.append(Constants.DOT)
             dotInserted = true
             lastNumeric = false
         } else if (hasResult) {
             onClear(view)
-            tvInput?.append("0.")
+            tvInput?.append(Constants.ZERO_DOT)
             dotInserted = true
             lastNumeric = true
         }
@@ -60,83 +63,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onEqual(view: View) {
-        var result = 0.0
-        val regex = "(?<=[-+*/])|(?=[-+*/])".toRegex()
-        var operations = tvInput?.text.toString().split(regex).toMutableList()
-        operations.removeAll(listOf("", null))
-        if (operations[0] == "-") {
-            operations.removeFirst()
-            isNegative = true
+
+        val operations = tvInput?.text.toString()
+
+        val result = myCalculator.onEqual(operations)
+
+        if (result > 0) {
+            isNegative = false
         }
-        if (operations[operations.size - 1] == "-" || operations[operations.size - 1] == "+" ||
-            operations[operations.size - 1] == "*" || operations[operations.size - 1] == "/") {
-            operations.removeLast()
-        }
-        while (operations.size > 1) {
-            if (operations.contains("/")) {
-                operations = calculate(operations, "/")
-            } else if (operations.contains("*")) {
-                operations = calculate(operations, "*")
-            } else if (operations.contains("-")) {
-                operations = calculate(operations, "-")
-            } else if (operations.contains("+")) {
-                operations = calculate(operations, "+")
-            }
-        }
-
-            result = operations[0].toDouble()
-
-
-            if (result > 0) {
-                isNegative = false
-            }
-
-
-        tvInput?.text = removeZeroAfterDot(result.toString())
+        tvInput?.text = result.toString()
 
         hasResult = true
     }
 
-    private fun calculate(operations: MutableList<String>, operand: String): MutableList<String> {
-        while (operations.contains(operand)) {
-            val operandIndex = operations.indexOfFirst { it == operand }
-            val leftNum = getLeftNum(operations[operandIndex - 1])
-            val rightNum = operations[operandIndex + 1].toDouble()
-            when (operand) {
-                "/" -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
-                    operations.removeAt(operandIndex)
-                        .also { operations.removeAt(operandIndex - 1) }
-                }
-                "*" -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
-                    operations.removeAt(operandIndex)
-                        .also { operations.removeAt(operandIndex) }
-                }
-                "+" -> operations[operandIndex - 1] = (leftNum + rightNum).toString().also {
-                    operations.removeAt(operandIndex)
-                        .also { operations.removeAt(operandIndex) }
-                }
-                else -> operations[operandIndex - 1] = (leftNum - rightNum).toString().also {
-                    operations.removeAt(operandIndex)
-                        .also { operations.removeAt(operandIndex) }
-                }
-            }
-        }
-        return operations
-    }
-
-    private fun getLeftNum(number: String): Double {
-        if (isNegative) {
-            return 0.0 - number.toDouble()
-        }
-        return number.toDouble()
-    }
-
-
-    private fun removeZeroAfterDot(result: String): String {
-        var value = result
-        if (result.contains(".0")) {
-            value = result.substring(0, result.length - 2)
-        }
-        return value
-    }
 }

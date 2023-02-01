@@ -1,39 +1,34 @@
 package com.tutorial.calculatorapp.model
 
-import android.view.View
-import android.widget.Button
 import com.tutorial.calculatorapp.`interface`.ICalculator
+import com.tutorial.calculatorapp.constants.Constants
 
 class Calculator : ICalculator {
-    private var lastNumeric: Boolean = false
-    private var dotInserted: Boolean = false
     private var isNegative: Boolean = false
-    private var hasResult = false
-
 
 
     override fun onEqual(input: String) : Double {
-        var result = 0.0
-        val regex = "(?<=[-+*/])|(?=[-+*/])".toRegex()
+        val result: Double
+        val regex = Constants.REGEX_VALUE.toRegex()
         var operations = input.split(regex).toMutableList()
         operations.removeAll(listOf("", null))
-        if (operations[0] == "-") {
+        if (operations[0] == Constants.MINUS) {
             operations.removeFirst()
             isNegative = true
         }
-        if (operations[operations.size - 1] == "-" || operations[operations.size - 1] == "+" ||
-            operations[operations.size - 1] == "*" || operations[operations.size - 1] == "/") {
+        if (operations[operations.size - 1] == Constants.MINUS || operations[operations.size - 1] == Constants.PLUS ||
+            operations[operations.size - 1] == Constants.MULTIPLIER || operations[operations.size - 1] == Constants.DIVIDER) {
             operations.removeLast()
         }
         while (operations.size > 1) {
-            if (operations.contains("/")) {
-                operations = calculate(operations, "/")
-            } else if (operations.contains("*")) {
-                operations = calculate(operations, "*")
-            } else if (operations.contains("-")) {
-                operations = calculate(operations, "-")
-            } else if (operations.contains("+")) {
-                operations = calculate(operations, "+")
+            if (operations.contains(Constants.DIVIDER)) {
+                operations = calculate(operations, Constants.DIVIDER)
+            } else if (operations.contains(Constants.MULTIPLIER)) {
+                operations = calculate(operations, Constants.MULTIPLIER)
+            } else if (operations.contains(Constants.MINUS)) {
+                operations = calculate(operations, Constants.MINUS)
+            } else if (operations.contains(Constants.PLUS)) {
+                operations = calculate(operations, Constants.PLUS)
             }
         }
 
@@ -58,15 +53,15 @@ class Calculator : ICalculator {
             val leftNum = getLeftNum(operations[operandIndex - 1])
             val rightNum = operations[operandIndex + 1].toDouble()
             when (operand) {
-                "/" -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
+                Constants.DIVIDER -> operations[operandIndex - 1] = (leftNum / rightNum).toString().also {
                     operations.removeAt(operandIndex)
                         .also { operations.removeAt(operandIndex - 1) }
                 }
-                "*" -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
+                Constants.MULTIPLIER -> operations[operandIndex - 1] = (leftNum * rightNum).toString().also {
                     operations.removeAt(operandIndex)
                         .also { operations.removeAt(operandIndex) }
                 }
-                "+" -> operations[operandIndex - 1] = (leftNum + rightNum).toString().also {
+                Constants.PLUS-> operations[operandIndex - 1] = (leftNum + rightNum).toString().also {
                     operations.removeAt(operandIndex)
                         .also { operations.removeAt(operandIndex) }
                 }
@@ -81,7 +76,7 @@ class Calculator : ICalculator {
 
     override fun removeZeroAfterDot(result: String): Double {
         var value = result
-        if (result.contains(".0")) {
+        if (result.contains(Constants.DOT_ZERO)) {
             value = result.substring(0, result.length - 2)
         }
         return value.toDouble()
@@ -89,7 +84,7 @@ class Calculator : ICalculator {
 
     override fun getLeftNum(number: String): Double {
         if (isNegative) {
-            return 0.0 - number.toDouble()
+            return Constants.INITIAL_VALUE- number.toDouble()
         }
         return number.toDouble()
     }
