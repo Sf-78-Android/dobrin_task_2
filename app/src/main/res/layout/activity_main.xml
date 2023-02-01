@@ -10,12 +10,42 @@
     <TextView
         android:id="@+id/tvInput"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:background="@color/light_gray"
         android:gravity="end|bottom"
         android:padding="10dp"
         android:text="@string/calc_text"
         android:textSize="48sp" />
+
+    <LinearLayout
+        android:id="@+id/moreFunctions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+
+        <Button
+            android:id="@+id/factorial"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:onClick="onFactorial"
+            android:text="@string/factorial" />
+
+        <Button
+            android:id="@+id/sqrt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:onClick="onSqrt"
+            android:text="@string/sqrt" />
+
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -207,11 +237,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="2dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:onClick="onEqual"
             android:text="@string/equal" />
-
-
 
 
     </LinearLayout>

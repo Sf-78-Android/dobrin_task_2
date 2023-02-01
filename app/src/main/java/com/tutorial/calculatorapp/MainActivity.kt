@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     private var lastNumeric: Boolean = false
     private var dotInserted: Boolean = false
     private var isNegative: Boolean = false
+    private var lastSqrt: Boolean = false
     private var hasResult = false
     private val myCalculator = Calculator()
 
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         }
         tvInput?.append((view as Button).text)
         lastNumeric = true
+        lastSqrt=false
     }
 
     fun onClear(view: View) {
@@ -36,10 +38,11 @@ class MainActivity : AppCompatActivity() {
         lastNumeric = false
         hasResult = false
         isNegative = false
+        lastSqrt=false
     }
 
     fun onDecimalPoint(view: View) {
-        if (lastNumeric && !dotInserted && !hasResult) {
+        if (lastNumeric && !dotInserted && !hasResult && !lastSqrt) {
             tvInput?.append(Constants.DOT)
             dotInserted = true
             lastNumeric = false
@@ -63,17 +66,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onEqual(view: View) {
-
         val operations = tvInput?.text.toString()
-
         val result = myCalculator.onEqual(operations)
-
-        if (result > 0) {
+        if (result > Constants.ZERO) {
             isNegative = false
         }
         tvInput?.text = result.toString()
 
         hasResult = true
     }
+
+    fun onFactorial(view: View) {
+        if (lastNumeric) {
+            tvInput?.text.let {
+                tvInput?.append(Constants.FACTORIAL_SIGN)
+            }
+
+        }
+        hasResult = false
+    }
+
+    fun onSqrt(view: View) {
+        if (hasResult) {
+            onClear(view)
+        }
+        if (!lastNumeric && !lastSqrt) {
+            tvInput?.text.let {
+                tvInput?.append(Constants.SQRT_SIGN)
+                lastSqrt=true
+            }
+        }
+        hasResult = false
+    }
+
+   fun onRaiseTo() {
+        if (lastNumeric) {
+            tvInput?.text.let {
+                tvInput?.append(Constants.SQRT_SIGN)
+            }
+
+        }
+        hasResult = false
+    }
+
 
 }

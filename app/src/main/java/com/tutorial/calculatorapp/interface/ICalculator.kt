@@ -6,5 +6,6 @@ interface ICalculator {
     fun calculate(operations: MutableList<String>, operand: String): MutableList<String>
     fun removeZeroAfterDot(result: String): Double
     fun getLeftNum(number: String): Double
+    fun calculateSqrt(value: String) : String
 
 }

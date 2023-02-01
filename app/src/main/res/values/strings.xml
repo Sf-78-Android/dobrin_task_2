@@ -19,4 +19,9 @@
     <string name="add">+</string>
     <string name="equal">=</string>
     <string name="dot">.</string>
+    <string name="factorial">x!</string>
+    <string name="sqrt">sqrt</string>
+    <string name="openBracket">(</string>
+    <string name="closingBracket">)</string>
+    <string name="FN">fn</string>
 </resources>
