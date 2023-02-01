@@ -3,6 +3,7 @@ package com.tutorial.calculatorapp.model
 import com.tutorial.calculatorapp.`interface`.ICalculator
 import com.tutorial.calculatorapp.constants.Constants
 import kotlin.math.floor
+import kotlin.math.sqrt
 
 
 class Calculator : ICalculator {
@@ -120,7 +121,7 @@ class Calculator : ICalculator {
     }
 
     override fun calculateSqrt(value: String): String {
-        return Math.sqrt(value.toDouble()).toString()
+        return sqrt(value.toDouble()).toString()
     }
 
 }
