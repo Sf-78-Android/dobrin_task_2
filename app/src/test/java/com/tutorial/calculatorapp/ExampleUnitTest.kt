@@ -37,11 +37,13 @@ class ExampleUnitTest {
         val result = myCalculator.onEqual(calc19)
         assert(result.equals(12.0))
     }
+
     @Test
     fun sqrtSqrtFactorialAddition_isCorrect() {
         val result = myCalculator.onEqual(calc18)
         assert(result.equals(4.0))
     }
+
     @Test
     fun sqrtDivision_isCorrect() {
         val result = myCalculator.onEqual(calc17)
@@ -71,7 +73,8 @@ class ExampleUnitTest {
         val result = myCalculator.onEqual(calc3)
         assert(result.equals(16.0))
     }
-@Test
+
+    @Test
     fun multiplicationWinDecimal_isCorrect() {
         val result = myCalculator.onEqual(calc7)
         assert(result.equals(0.25))
@@ -82,56 +85,61 @@ class ExampleUnitTest {
         val result = myCalculator.onEqual(calc4)
         assert(result.equals(9.0))
     }
- @Test
+
+    @Test
     fun checkOperatorPriorityIsCorrect() {
         val result = myCalculator.onEqual(calc5)
         assert(result.equals(72.0))
     }
-@Test
+
+    @Test
     fun checkCalculationWithOneTypeOfNumber() {
         val result = myCalculator.onEqual(calc6)
         assert(result.equals(6.0))
     }
 
-@Test
+    @Test
     fun checkNegativeNumberOutput() {
         val result = myCalculator.onEqual(calc8)
-        assert(result.equals(-11.0) )
+        assert(result.equals(-11.0))
     }
-@Test
+
+    @Test
     fun checkDecimalOutput() {
         val result = myCalculator.onEqual(calc9)
         assert(result.equals(0.020408163265306)) { println(result.toString()) }
 
-}
-@Test
+    }
+
+    @Test
     fun removesSignAtEndAndCalculationIsCorrect() {
         val result = myCalculator.onEqual(calc10)
         assert(result.equals(27.0))
-}
+    }
+
     @Test
     fun factorial_isCorrect() {
         val result = myCalculator.onEqual(calc11)
         assert(result.equals(12.0))
     }
 
- @Test
+    @Test
     fun factorialBeforeDivision_isCorrect() {
         val result = myCalculator.onEqual(calc12)
         assert(result.equals(5.0))
     }
-@Test
+
+    @Test
     fun ignoreDecimal_isCorrect() {
         val result = myCalculator.onEqual(calc13)
         assert(result.equals(2.0))
     }
 
-@Test
+    @Test
     fun factorialOfZeroReturnsZero_isCorrect() {
         val result = myCalculator.onEqual(calc14)
         assert(result.equals(0.0))
     }
-
 
 
 }

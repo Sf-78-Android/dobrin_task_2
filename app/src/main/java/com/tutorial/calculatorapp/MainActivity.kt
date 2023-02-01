@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         }
         tvInput?.append((view as Button).text)
         lastNumeric = true
-        lastSqrt=false
+        lastSqrt = false
     }
 
     fun onClear(view: View) {
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         lastNumeric = false
         hasResult = false
         isNegative = false
-        lastSqrt=false
+        lastSqrt = false
     }
 
     fun onDecimalPoint(view: View) {
@@ -93,21 +93,9 @@ class MainActivity : AppCompatActivity() {
         if (!lastNumeric && !lastSqrt) {
             tvInput?.text.let {
                 tvInput?.append(Constants.SQRT_SIGN)
-                lastSqrt=true
+                lastSqrt = true
             }
         }
         hasResult = false
     }
-
-   fun onRaiseTo() {
-        if (lastNumeric) {
-            tvInput?.text.let {
-                tvInput?.append(Constants.SQRT_SIGN)
-            }
-
-        }
-        hasResult = false
-    }
-
-
 }
